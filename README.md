@@ -24,7 +24,7 @@
 * `esx_textui` — same thing, blue borders
 * changed the `~b~` colour to match as well so it’s not all over the place
 * Did this completely fucking blind, so below is what it might look like idk fuck know.
-* Did not want to crack .fxap without your consent
+* **Did not want to crack .fxap without your consent**
 
 ### Removed
 
