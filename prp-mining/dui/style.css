@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+
+:root {
+    --col: white;
+}
+
+html, body {
+    width: 512px;
+    height: 512px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.green {
+    --col: #87DA21;
+}
+
+.red {
+    --col: rgb(218, 33, 33);
+}
+
+img {
+    position: absolute;
+}
+
+.drillOverlayTexture {
+    width: 512px;
+    height: 512px;
+    min-width: 512px;
+    min-height: 512px;
+    background-color: #ffffff00;
+    position: absolute;
+    /* transition: 0.5s; */
+}
+
+.drillOverlay {
+    width: 512px;
+    height: 512px;
+    min-width: 512px;
+    min-height: 512px;
+    background-color: rgba(218, 33, 33, 0.0);
+    position: absolute;
+    /* transition: 0.5s; */
+}
