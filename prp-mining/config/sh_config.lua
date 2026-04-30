@@ -855,7 +855,7 @@ Config.Ores = {
         price = 15,
         stackable = 50,
         reputationReward = 50,
-        sellPrice = 14,
+        sellPrice = 24,
         dropMin = 1,
         dropMax = 2,
     },

@@ -121,6 +121,7 @@ Citizen.CreateThread(function()
     end
 end)
 
+
 function GetDoubleDropChance(source)
     local stateId = bridge.fw.getIdentifier(source)
     if stateId then
@@ -340,10 +341,11 @@ RegisterNetEvent("prp-mining:oreDamaged", function(zoneName, oreId, damage, weap
                     coords = oreCorrectCoords,
                     items = itemDrop,
                     minerSource = source,
+                    minerIdentifier = stateId,
                     timestamp = os.time(),
                     propModel = joaat("destiny_stone_bit_"..ore.oreName),
                 }
-                TriggerClientEvent("prp-mining:spawnCollectible", -1, collectId, {
+                TriggerClientEvent("prp-mining:spawnCollectible", source, collectId, {
                     coords = oreCorrectCoords,
                     oreName = ore.oreName,
                     propModel = joaat("destiny_stone_bit_"..ore.oreName),
@@ -567,9 +569,11 @@ lib.callback.register("prp-mining:collectOre", function(source, collectId)
     if not collectible then
         return false, "This ore has already been collected."
     end
-    if collectible.minerSource ~= source then
+    local stateId = bridge.fw.getIdentifier(source)
+    if not stateId or collectible.minerIdentifier ~= stateId then
         return false, "This is not your ore."
     end
+    collectible.minerSource = source
     local playerPed = GetPlayerPed(source)
     if not playerPed or playerPed == 0 then
         return false, "Player not found."
@@ -586,15 +590,19 @@ lib.callback.register("prp-mining:collectOre", function(source, collectId)
     for _, item in ipairs(items) do
         bridge.inv.giveItem(source, item.name, item.count)
     end
-    -- Tell all clients to remove the prop
-    TriggerClientEvent("prp-mining:removeCollectible", -1, collectId)
+    -- Only the miner ever receives their collectible prop.
+    TriggerClientEvent("prp-mining:removeCollectible", source, collectId)
     return true, oreName
 end)
 
 lib.callback.register("prp-mining:syncCollectibles", function(source)
+    local stateId = bridge.fw.getIdentifier(source)
+    if not stateId then return {} end
+
     local result = {}
     for collectId, data in pairs(CollectableOres) do
-        if data.minerSource == source then
+        if data.minerIdentifier == stateId then
+            data.minerSource = source
             result[collectId] = {
                 coords = data.coords,
                 oreName = data.oreName,
@@ -614,19 +622,8 @@ Citizen.CreateThread(function()
         for collectId, data in pairs(CollectableOres) do
             if now - data.timestamp > 300 then
                 CollectableOres[collectId] = nil
-                TriggerClientEvent("prp-mining:removeCollectible", -1, collectId)
+                TriggerClientEvent("prp-mining:removeCollectible", data.minerSource, collectId)
             end
-        end
-    end
-end)
-
--- Clean up collectibles when a player disconnects
-AddEventHandler("playerDropped", function()
-    local src = source
-    for collectId, data in pairs(CollectableOres) do
-        if data.minerSource == src then
-            CollectableOres[collectId] = nil
-            TriggerClientEvent("prp-mining:removeCollectible", -1, collectId)
         end
     end
 end)

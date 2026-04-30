@@ -3,7 +3,7 @@ game "gta5"
 
 
 author "Prodigy Studios"
-version "1.0.0"
+version "1.2.1"
 
 lua54 "yes"
 shared_scripts {

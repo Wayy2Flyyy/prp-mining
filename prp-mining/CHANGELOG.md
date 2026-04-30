@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.1] - 2026-04-30
+
+### Fixed
+
+* collectible ore props now only spawn for the miner that created them
+* reconnect sync now restores uncollected ore props by player identifier until the 5 minute cleanup expires
+* rare raw gem sell price now matches the rare sell tier
+* bumped `fxmanifest.lua` version to match the shipped changelog
+
 ## [1.2.0] - 2026-04-09
 
 ### Added
